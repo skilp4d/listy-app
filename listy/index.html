@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>Listy</title>
+    <link href="css/Ply.css" rel="stylesheet" type="text/css" />
+    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-T8Gy5hrqNKT+hzMclPo118YTQO6cYprQmhrYwIiQ/3axmI1hQomh7Ud2hPOy8SP1" crossorigin="anonymous">
+    <link rel="stylesheet" href="css/main.css" media="screen" title="no title" charset="utf-8">
+</head>
+
+<body>
+    <div id="listOfLists">
+        <h2>All Lists</h2>
+        <ul id="listNames">
+
+        </ul>
+        <button id="createList" type="button" name="button">Create List</button>
+    </div>
+    <div id="ListData">
+        <h2>tempList</h2>
+        <ul id="listUL" data-listName="">
+        </ul>
+        <button type="button" id="addItem" name="button">Add Item</button>
+        <button type="button" id="allLists" name="button">All Lists</button>
+    </div>
+    </body>
+<script src="js/jquery.js" charset="utf-8"></script>
+<script src="js/sortable.js" charset="utf-8"></script>
+<script src="js/Ply.js"></script>
+<script src="js/utils.js" charset="utf-8"></script>
+<script type="text/javascript">
+    var currentList = "tempList";
+    $(document).ready(function() {
+        var colors = {
+            top: {
+                r: 242,
+                g: 38,
+                b: 19
+            },
+            bottom: {
+                r: 253,
+                g: 227,
+                b: 167
+            }
+        }
+
+        $("#allLists").click(function () {
+            $("#ListData").hide();
+            $("#listOfLists").slideDown();
+        });
+
+        $("#listNames").on('click', '.fa-times', function (e) {
+            var name = $(this).parent().attr('data-listName');
+            ListyDB.removeList(name);
+            $(this).parent().remove();
+            paintListsList();
+            e.stopPropagation();
+        });
+
+        $("#listUL").sortable({
+            filter: '.fa-times',
+            onFilter: function(evt) {
+                evt.item.parentNode.removeChild(evt.item);
+                redraw(currentList);
+            },
+            onUpdate: function( /**Event*/ evt) {
+                redraw(currentList);
+            }
+
+        }); // init
+
+        var allListsFromDb = ListyDB.getAllListNames();
+        allListsFromDb.forEach(function (name) {
+            $("#listNames").append("<li data-listName='"+ name +"'><span class='text'>" + name + '</span><i class="fa fa-times" aria-hidden="true"></i>' + "</li>");
+
+        });
+
+        paintListsList();
+        function paintListsList () {
+            var items = $("#listNames").children("li");
+            var len = items.length;
+            console.log(len);
+            items.each(function(index, obj) {
+                var r = colors.top.r - parseInt((colors.top.r - colors.bottom.r) / len * index);
+                var g = colors.top.g - parseInt((colors.top.g - colors.bottom.g) / len * index);
+                var b = colors.top.b - parseInt((colors.top.b - colors.bottom.b) / len * index);
+                $(obj).css({
+                    "background-color": "rgb(" + r + "," + g + "," + b + ")"
+                });
+            });
+
+        }
+        redraw(currentList);
+
+        function redraw(listname) {
+            console.log("Redraw");
+            var list = $("#listUL").filter(function() {
+                return $(this).attr('data-listName') == listname;
+            });
+            var items = list.children();
+            var len = items.length;
+            console.log(len);
+
+            items.each(function(index, obj) {
+                var r = colors.top.r - parseInt((colors.top.r - colors.bottom.r) / len * index);
+                var g = colors.top.g - parseInt((colors.top.g - colors.bottom.g) / len * index);
+                var b = colors.top.b - parseInt((colors.top.b - colors.bottom.b) / len * index);
+                $(obj).css({
+                    "background-color": "rgb(" + r + "," + g + "," + b + ")"
+                });
+            });
+            console.log(getListDataArray());
+            ListyDB.updateList(listname, getListDataArray());
+        };
+
+        $("#addItem").click(function() {
+            Ply.dialog('prompt', {
+                title: 'Add',
+                form: {
+                    name: 'name'
+                }
+            }).done(function(ui) {
+
+                var list = $("#listUL");
+                list.prepend("<li><span class='item_text'>" + ui.data.name + '</span><i class="fa fa-times" aria-hidden="true"></i>' + "</li>");
+                redraw(currentList);
+            });
+        });
+
+        $("#createList").click(function () {
+            Ply.dialog('prompt', {
+                title: 'List Name',
+                form: {
+                    name: 'name'
+                }
+            }).done(function(ui) {
+
+                var list = $("#listNames");
+                list.append("<li data-listName='"+ ui.data.name +"'><span class='text'>" + ui.data.name + '</span><i class="fa fa-times" aria-hidden="true"></i>' + "</li>");
+                paintListsList();
+                ListyDB.addList(ui.data.name, []);
+                currentList = ui.data.name;
+                ListyDB.setCurrentList(currentList);
+                $("#listOfLists").hide();
+                var ld = $("#ListData");
+                var lul = $("#listUL");
+                lul.attr('data-listName', currentList);
+                lul.html("");
+                ld.children("h2").html(currentList);
+                ld.slideDown();
+                redraw(currentList);
+            });
+        });
+
+        $("#listNames").on('click','li', function () {
+            //ListyDB.updateList(currentList, getListDataArray());
+            console.log("listname clicked");
+            currentList = $(this).attr("data-listName");
+            ListyDB.setCurrentList(currentList);
+            $("#listOfLists").hide();
+            var ld = $("#ListData");
+            var lul = $("#listUL");
+            ld.children("h2").html(currentList);
+            lul.attr('data-listName', currentList);
+            lul.html("");
+            var nlistdata = ListyDB.getList(currentList);
+            nlistdata.forEach(function (data) {
+                lul.append("<li><span class='item_text'>" + data + '</span><i class="fa fa-times" aria-hidden="true"></i>' + "</li>");
+            });
+            redraw(currentList);
+            ld.slideDown();
+
+        });
+
+        function getListDataArray() {
+            var mylist = [];
+            $('.item_text').each(function (i, data) {
+                mylist.push($(data).html());
+            });
+            return mylist;
+        };
+
+
+        // $("ul").on('click', '.fa-times', function() {
+        //     $(this).parent().remove();
+        // });
+    });
+</script>
+
+</html>

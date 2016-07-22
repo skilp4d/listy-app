@@ -1,0 +1,71 @@
+* {
+    margin: 0px;
+    padding: 0px;
+}
+ul {
+    list-style-type: none;
+    cursor: pointer;
+}
+li {
+    width: 100%;
+    background: red;
+    font-size: 1.3em;
+    text-indent: 15px;
+    color: white;
+    font-family: consolas;
+}
+li .fa-times {
+    float: right;
+    margin-right: 5px;
+}
+h2{
+    text-align: center;
+    background-color: #39C082;
+    color: white;
+    font-family: 'Roboto', sans-serif;
+    height: 40px;
+    line-height: 40px;
+}
+#addItem , #allLists, #createList{
+    position: relative;
+    color: #fff;
+    cursor: pointer;
+    border: 0;
+    outline: 0;
+    box-shadow: 0 1px 1px rgba(0,0,0,.2);
+    background-color: #39C082;
+    font-size: 18px;
+    width: 100%;
+    margin: 2px 0px;
+}
+#allLists:focus, #addItem:focus {
+    box-shadow: 0 0 1px 2px rgba(255, 180, 0, .6);
+    border: 2px solid rgb(255, 210, 102);
+}
+
+#ListData{
+    display: none;
+}
+
+#listOfLists{
+    position: absolute;
+    height: 100%;
+    width: 100%;
+}
+#listOfLists ul{
+   // margin-bottom: 50px;
+    //padding-bottom: 50px;
+    height: calc(100% - 80px);
+    overflow-y: auto;
+}
+
+#createList{
+    height: 40px;
+    position: absolute;
+    bottom: 0px;
+}
+
+#listNames li{
+    margin: 2px 0px;
+    background: green;
+}
