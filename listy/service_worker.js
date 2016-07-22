@@ -2,15 +2,15 @@ self.addEventListener('install', function(e) {
  e.waitUntil(
    caches.open('listy ').then(function(cache) {
      return cache.addAll([
-       '/',
-       '/index.html',
-       '/css/main.css',
+       '/listy/*',
+       '/listy/index.html',
+       '/listy/css/main.css',
        'https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css',
-       '/css/Ply.css',
-       '/js/jquery.js',
-       '/js/sortable.js',
-       '/js/Ply.js',
-       '/js/utils.js'
+       '/listy/css/Ply.css',
+       '/listy/js/jquery.js',
+       '/listy/js/sortable.js',
+       '/listy/js/Ply.js',
+       '/listy/js/utils.js'
      ]);
    })
  );
