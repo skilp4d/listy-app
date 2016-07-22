@@ -2,6 +2,7 @@ self.addEventListener('install', function(e) {
  e.waitUntil(
    caches.open('listy').then(function(cache) {
      return cache.addAll([
+      '/listy/',
        '/listy/index.html',
        '/listy/css/main.css',
        'https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css',
