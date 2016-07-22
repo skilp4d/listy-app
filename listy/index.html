@@ -3,6 +3,7 @@
 
 <head>
     <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Listy</title>
     <link href="css/Ply.css" rel="stylesheet" type="text/css" />
     <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-T8Gy5hrqNKT+hzMclPo118YTQO6cYprQmhrYwIiQ/3axmI1hQomh7Ud2hPOy8SP1" crossorigin="anonymous">
@@ -24,7 +25,7 @@
         <button type="button" id="addItem" name="button">Add Item</button>
         <button type="button" id="allLists" name="button">All Lists</button>
     </div>
-    </body>
+</body>
 <script src="js/jquery.js" charset="utf-8"></script>
 <script src="js/sortable.js" charset="utf-8"></script>
 <script src="js/Ply.js"></script>
@@ -45,12 +46,12 @@
             }
         }
 
-        $("#allLists").click(function () {
+        $("#allLists").click(function() {
             $("#ListData").hide();
             $("#listOfLists").slideDown();
         });
 
-        $("#listNames").on('click', '.fa-times', function (e) {
+        $("#listNames").on('click', '.fa-times', function(e) {
             var name = $(this).parent().attr('data-listName');
             ListyDB.removeList(name);
             $(this).parent().remove();
@@ -71,13 +72,14 @@
         }); // init
 
         var allListsFromDb = ListyDB.getAllListNames();
-        allListsFromDb.forEach(function (name) {
-            $("#listNames").append("<li data-listName='"+ name +"'><span class='text'>" + name + '</span><i class="fa fa-times" aria-hidden="true"></i>' + "</li>");
+        allListsFromDb.forEach(function(name) {
+            $("#listNames").append("<li data-listName='" + name + "'><span class='text'>" + name + '</span><i class="fa fa-times" aria-hidden="true"></i>' + "</li>");
 
         });
 
         paintListsList();
-        function paintListsList () {
+
+        function paintListsList() {
             var items = $("#listNames").children("li");
             var len = items.length;
             console.log(len);
@@ -128,7 +130,7 @@
             });
         });
 
-        $("#createList").click(function () {
+        $("#createList").click(function() {
             Ply.dialog('prompt', {
                 title: 'List Name',
                 form: {
@@ -137,7 +139,7 @@
             }).done(function(ui) {
 
                 var list = $("#listNames");
-                list.append("<li data-listName='"+ ui.data.name +"'><span class='text'>" + ui.data.name + '</span><i class="fa fa-times" aria-hidden="true"></i>' + "</li>");
+                list.append("<li data-listName='" + ui.data.name + "'><span class='text'>" + ui.data.name + '</span><i class="fa fa-times" aria-hidden="true"></i>' + "</li>");
                 paintListsList();
                 ListyDB.addList(ui.data.name, []);
                 currentList = ui.data.name;
@@ -153,7 +155,7 @@
             });
         });
 
-        $("#listNames").on('click','li', function () {
+        $("#listNames").on('click', 'li', function() {
             //ListyDB.updateList(currentList, getListDataArray());
             console.log("listname clicked");
             currentList = $(this).attr("data-listName");
@@ -165,7 +167,7 @@
             lul.attr('data-listName', currentList);
             lul.html("");
             var nlistdata = ListyDB.getList(currentList);
-            nlistdata.forEach(function (data) {
+            nlistdata.forEach(function(data) {
                 lul.append("<li><span class='item_text'>" + data + '</span><i class="fa fa-times" aria-hidden="true"></i>' + "</li>");
             });
             redraw(currentList);
@@ -175,7 +177,7 @@
 
         function getListDataArray() {
             var mylist = [];
-            $('.item_text').each(function (i, data) {
+            $('.item_text').each(function(i, data) {
                 mylist.push($(data).html());
             });
             return mylist;
