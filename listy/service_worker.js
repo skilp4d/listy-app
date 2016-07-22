@@ -5,7 +5,7 @@ self.addEventListener('install', function(e) {
        '/',
        '/index.html',
        '/css/main.css',
-       'https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css'
+       'https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css',
        '/css/Ply.css',
        '/js/jquery.js',
        '/js/sortable.js',
